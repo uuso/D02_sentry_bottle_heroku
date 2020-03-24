@@ -1,0 +1,9 @@
+{
+  "name": "Bottle-setry.io",
+  "description": "Simple bottle app",
+  "image": "heroku/python",
+  "keywords": [
+    "python",
+    "sentry.io"
+  ]
+}

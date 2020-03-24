@@ -1,12 +1,8 @@
-import sentry_key
+import os
 from bottle import Bottle, run
 import sentry_sdk
 from sentry_sdk.integrations.bottle import BottleIntegration
 
-sentry_sdk.init(
-    dsn=sentry_key.dsn,
-    integrations=[BottleIntegration()]
-)
 
 app = Bottle()
 
@@ -22,5 +18,14 @@ def success():
 def fail():
     raise RuntimeError("Failure!")
 
+sentry_sdk.init(dsn=os.environ.get("DSN"),integrations=[BottleIntegration()])
 
-app.run(host = "10.186.0.248", port=8080)
+if os.environ.get("APP_LOCATION") == "heroku":    
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        server="gunicorn",
+        workers=3,
+    )
+else:
+    app.run(host = "10.186.0.248", port=8080)
